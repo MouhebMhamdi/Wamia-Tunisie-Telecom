@@ -1,0 +1,111 @@
+<app-header-admin></app-header-admin>
+
+
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+      <div class="row container d-flex justify-content-center">
+          <div class="col-xl-6 col-md-12">
+              <div class="card user-card-full">
+                  <div class="row m-l-0 m-r-0">
+                      <div class="col-sm-4 bg-c-lite-green user-profile">
+                          <div class="card-block text-center text-white">
+                              <div class="m-b-25"> <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image"> </div>
+                              <h6 class="f-w-600">{{ user.nom }} {{ user.prenom }} </h6>
+                               <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                          </div>
+                      </div>
+                      <div class="col-sm-8">
+                          <div class="card-block">
+                              <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Informations</h6>
+                              <div class="row">
+                                  <div class="col-sm-6">
+                                      <p class="m-b-10 f-w-600">Email</p>
+                                      <h6 class="text-muted f-w-400">{{ user.email }}</h6>
+                                  </div>
+                                  <div class="col-sm-6">
+                                      <p class="m-b-10 f-w-600">Téléphone</p>
+                                      <h6 class="text-muted f-w-400">{{ user.tel }} </h6>
+                                  </div>
+                                  <div class="col-sm-8">
+                                    <p class="m-b-10 f-w-600">Nom d'utilisateur</p>
+                                    <h6 class="text-muted f-w-400">{{ user.username }} </h6>
+                                </div>
+                              </div>
+                              <div class="row">
+                                  <div class="col-sm-6">
+                                    
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <a  class="btn btn-success" (click)="open(EditProfile)"><i class="bi bi-pencil-square"></i> Modifier</a>
+
+                                  </div>
+                              </div>
+                              
+                              
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+  <ng-template #EditProfile let-modal>
+    <form #editProfileForm="ngForm" (ngSubmit)="editProfile(editProfileForm)">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Profile</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    
+        <div class="form-group">
+          <label for="dateOfBirth">Nom:</label>
+          <input type="text" name="nom" [ngModel]="user.nom"   class="form-control">
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Prénom:</label>
+          <input type="text" name="prenom"  [ngModel]="user.prenom" class="form-control"  >
+ 
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Nom d'utilisateur:</label>
+          <input type="text" name="username"  [ngModel]="user.username" class="form-control"  >
+ 
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Email:</label>
+          <input type="email" name="email"  [ngModel]="user.email" class="form-control"  >
+ 
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Téléphone:</label>
+          <input type="number" name="tel"  [ngModel]="user.tel" class="form-control"  >
+ 
+          
+        </div>
+        
+       
+
+      
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" >Save</button>
+    </div>
+  </form>
+  </ng-template>

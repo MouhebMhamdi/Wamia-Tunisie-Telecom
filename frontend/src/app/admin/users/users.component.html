@@ -1,0 +1,40 @@
+<app-header-admin></app-header-admin>
+
+  <div class="container p-5 m-5">
+      <h4 class="text-secondary"> <i class="bi bi-people-fill"></i> Liste des clients</h4>
+      <hr /> 
+      <div class="">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th>Nom utilisateur</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let client of clients;index as i">
+                  <th scope="row">{{ i+1 }}</th>
+                  <td>{{ client.user.username }}</td>
+                  <td>{{ client.user.email }}</td>
+                  <td>{{ client.user.role }}</td>
+                  <td>
+                    <a title="Activer" *ngIf="client.user.active == 0" (click)="activeUser(client.user._id)" class="btn btn-success me-2"><i class="bi bi-check-circle-fill"></i> </a>
+                    <a title="Desactiver" *ngIf="client.user.active == 1" (click)="activeUser(client.user._id)" class="btn btn-warning me-2 text-white">
+                      <i class="bi bi-x-circle-fill"></i> </a>
+                    <a  (click)="DeleteUser(client.user._id)" class="btn btn-danger"><i class="bi bi-trash"></i> </a>
+                  </td>
+                </tr>
+                
+              </tbody>
+          </table>
+      </div>
+
+     
+    
+
+
+  </div>
+

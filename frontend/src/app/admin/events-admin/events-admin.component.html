@@ -1,0 +1,42 @@
+<app-header-admin></app-header-admin>
+
+  <div class="container p-5 m-5">
+      <h4 class="text-secondary"> <i class="bi bi-people-fill"></i> Liste des evenemets</h4>
+      <hr /> 
+      <div class="">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th>Categorie</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Prix</th>
+                  <th scope="col">Etat</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let e of events;index as i"  >
+                  <th scope="row">{{ i+1 }}</th>
+                  <td ><span class="badge bg-primary">{{ e.categerie.nom }}</span></td>
+                  <td>{{ e.nom }}</td>
+                  <td>{{ e.prix }} DT</td>
+                  <td>{{ e.stat }}</td>
+                  <td>
+                   
+                    <a title="Desactiver" *ngIf="e.stat == 'non active'" (click)="activeEvent(e._id)" class="btn btn-success me-2 text-white">
+                      <i class="bi bi-check"></i> </a>
+                   
+                  </td>
+                </tr>
+                
+              </tbody>
+          </table>
+      </div>
+
+     
+    
+
+
+  </div>
+

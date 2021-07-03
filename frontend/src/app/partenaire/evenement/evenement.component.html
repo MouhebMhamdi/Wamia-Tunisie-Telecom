@@ -1,0 +1,190 @@
+<app-header-partenaire></app-header-partenaire>
+
+
+
+<div class="container p-5 m-5">
+  <div class="row col-12">
+
+    <div class="col-6">
+      <h4 class="text-secondary"> <i class="bi bi-bookmarks-fill"></i> Liste des evenements</h4>
+    </div>
+    <div class="col-6 d-flex justify-content-end p-2">
+      <a  class="btn btn-primary" (click)="open(content)"><i class="bi bi-bookmark-plus-fill"></i> Ajouter</a>
+
+    </div>
+  </div>
+    
+    <hr /> 
+    <div class="row col-12">
+        <div class="col-3" *ngFor="let event of events">
+          <div class="card"  >
+            <img src="http://127.0.0.1:8000/uploadsFolder/{{ event.image }}" with="180" height="300" class="card-img-top" alt="...">
+            <div class="card-body">
+              <span class="badge bg-danger">{{ event.prix }} DTT</span>
+              <h5 class="card-title">{{ event.nom }}</h5>
+              <p class="card-text"> {{ event.description }}</p>
+              <div class="row">
+                <div class="col-sm-3"><a href="#" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a></div>
+                <div class="col-sm-3"> <a (click)="getMyEvent(event._id,EditEvent)" class="btn btn-success me-2"><i class="bi bi-pencil-square"></i> </a></div>
+                <div class="col-sm-3"><a (click)="DeleteEvent(event._id)"  class="btn btn-danger"><i class="bi bi-trash"></i> </a></div>
+               </div>
+
+               
+            </div>
+          </div>
+           
+        </div>
+      
+    </div>
+
+
+
+</div>
+
+    
+<ng-template #content let-modal>
+    <form #addEventForm="ngForm" (ngSubmit)="addEvent(addEventForm)" enctype="multipart/form-data">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Ajouter evenement</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    
+
+        <div class="form-group">
+            <label for="dateOfBirth">Categorie Evenement :</label>
+            <select name="categorie" ngModel #categorie="ngModel" class="form-control">
+              <option selected value="" >Choisir une categorie</option>
+              <option *ngFor="let cat of categories" value="{{ cat._id }}" >{{ cat.nom }}</option>
+            </select>
+            
+          </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Nom evenement :</label>
+          <input type="text" name="nom" ngModel #nom="ngModel" placeholder="Nom Evenement ..." class="form-control">
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Description Evenement :</label>
+          <textarea name="description" ngModel #description="ngModel" class="form-control" placeholder="description Evenement ..." cols="30" rows="10"></textarea>
+ 
+          
+        </div>
+        
+        <div class="form-group">
+            <label for="dateOfBirth">Image Evenement :</label>
+            <input type="file" name="image" (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." />
+   
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Prix Ticket :</label>
+            <input type="number" name="prix" ngModel #prix="ngModel" class="form-control" placeholder="prix ticket ..." />
+     
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfBirth">Date Evenement :</label>
+            <input type="date" name="date" ngModel #date="ngModel" class="form-control" placeholder="date evenement ..." />
+     
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfBirth">heure Evenement :</label>
+            <input type="time" name="heure" ngModel #heure="ngModel" class="form-control" placeholder="heure evenement ..." />
+     
+          </div>
+       
+          <div class="form-group">
+            <label for="dateOfBirth">Video publicitaire</label>
+            www.youtube.com/watch?v=<input type="text" name="videoUrl" ngModel #heure="ngModel" class="form-control" placeholder="l'id v de votre video youtube" />
+     
+          </div>
+       
+       
+
+      
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" >Save</button>
+    </div>
+  </form>
+  </ng-template>
+
+
+
+
+
+  <ng-template #EditEvent let-modal>
+    <form #EditEventForm="ngForm" (ngSubmit)="updateEvent(events1._id,EditEventForm)">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit évenement</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    
+
+      <div class="form-group">
+          <label for="dateOfBirth">Categorie Evenement :</label>
+          <select name="categorie" ngModel #categorie="ngModel" class="form-control">
+            <option selected value="" >Ancienne categorie "{{events1.categerie.nom}}" sélectionner autre</option>
+            <option *ngFor="let cat of categories" value="{{ cat._id }}" >{{ cat.nom }}</option>
+          </select>
+          
+        </div>
+      <div class="form-group">
+        <label for="dateOfBirth">Nom evenement :</label>
+        <input type="text" name="nom" [ngModel]="events1.nom"   class="form-control">
+        
+      </div>
+      <div class="form-group">
+        <label for="dateOfBirth">Description Evenement :</label>
+        <textarea name="description" [ngModel]="events1.description" class="form-control" placeholder="description Evenement ..." cols="30" rows="10"></textarea>
+
+        
+      </div>
+      
+      <div class="form-group">
+          <label for="dateOfBirth">Image Evenement :</label>
+          <input type="file" name="image"  (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." />
+ 
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Prix Ticket :</label>
+          <input type="number" name="prix" [ngModel]="events1.prix" class="form-control" placeholder="prix ticket ..." />
+   
+        </div>
+
+        <div class="form-group">
+          <label for="dateOfBirth">Date Evenement :</label>
+          {{events1.date | date: 'dd/MM/yyyy'}}
+          <input type="date" name="date" value="{{events1.date | date: 'dd/MM/yyyy'}}" class="form-control" placeholder="date evenement ..." />
+          
+        </div>
+
+        <div class="form-group">
+          <label for="dateOfBirth">heure Evenement :</label>
+          <input type="time" name="heure" [ngModel]="events1.heure" class="form-control" placeholder="heure evenement ..." />
+   
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Video publicitaire</label>
+          www.youtube.com/watch?v=<input type="text" [ngModel]="events1.videoUrl" name="videoUrl" ngModel #heure="ngModel" class="form-control" placeholder="l'id v de votre video youtube" />
+   
+        </div>
+     
+     
+     
+
+    
+  </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" >Save</button>
+    </div>
+  </form>
+  </ng-template>

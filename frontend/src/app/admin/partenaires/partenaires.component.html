@@ -1,0 +1,130 @@
+<app-header-admin></app-header-admin>
+
+
+
+<div class="container p-5 m-5">
+  <div class="row col-12">
+
+    <div class="col-6">
+      <h4 class="text-secondary"> <i class="bi bi-people-fill"></i> Liste des partenaires</h4>
+    </div>
+    <div class="col-6 d-flex justify-content-end p-2">
+      <a  class="btn btn-primary" (click)="open(content)"><i class="bi bi-person-plus-fill"></i> Ajouter</a>
+
+    </div>
+  </div>
+    
+    <hr /> 
+    <div class="">
+      <table class="table table-bordered">
+          <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th>Nom utilisateur</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+        
+              <tr *ngFor="let p of partenaires;index as i">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ p.user.username }}</td>
+                <td>{{ p.user.email }}</td>
+                <td>{{ p.user.role }}</td>
+                <td>
+                    <a title="Activer" *ngIf="p.user.active == 0" (click)="activeUser(p.user._id)" class="btn btn-success me-2"><i class="bi bi-check-circle-fill"></i> </a>
+                    <a title="Desactiver" *ngIf="p.user.active == 1" (click)="activeUser(p.user._id)" class="btn btn-warning me-2 text-white">
+                      <i class="bi bi-x-circle-fill"></i> </a>
+                    <a (click)="DeleteUser(p.user._id)"  class="btn btn-danger"><i class="bi bi-trash"></i> </a>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+
+    <!-- Models -->
+
+
+    <ng-template #content let-modal>
+      <form #addPartenaireForm="ngForm" (ngSubmit)="addPartenaire(addPartenaireForm)">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Ajouter Partenaire</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+
+        <div class="form-group">
+          <label for="dateOfBirth">Categorie partenaire :</label>
+          <select name="categorie" ngModel #categorie="ngModel" class="form-control">
+            <option selected value="" >Choisir une categorie</option>
+            <option *ngFor="let cat of categories" value="{{ cat._id }}" >{{ cat.nom }}</option>
+          </select>
+          
+        </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Nom utilisateur :</label>
+            <input type="text" name="username" ngModel #username="ngModel" placeholder="Nom utilisateur ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Email :</label>
+            <input type="email" name="email" ngModel #email="ngModel" placeholder="email ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Mot de passe :</label>
+            <input type="password" name="password" ngModel #password="ngModel" placeholder="Mot de passe ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Nom :</label>
+            <input type="text" name="nom" ngModel #nom="ngModel" placeholder="Nom ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Prenom :</label>
+            <input type="text" name="prenom" ngModel #prenom="ngModel" placeholder="Prenom ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Adresse :</label>
+            <input type="text" name="adresse" ngModel #adresse="ngModel" placeholder="Adresse ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Telephone :</label>
+            <input type="text" name="telephone" ngModel #telephone="ngModel" placeholder="Telephone ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Photo :</label>
+            <input type="file" name="image" ngModel #image="ngModel" placeholder="Photo ..." class="form-control">
+            
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" >Save</button>
+      </div>
+    </form>
+    </ng-template>
+  
+    
+ 
+    
+  
+
+   
+  
+
+
+

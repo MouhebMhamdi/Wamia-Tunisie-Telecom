@@ -1,0 +1,36 @@
+
+
+  <div class="container">
+     
+    <div class="login col-8 offset-2 p-3">
+        <div class="mb-2 text-center">
+            <img src="/assets/Tunisie-Telecom.png" width="200" />
+        </div>
+       
+        <h2 class="text-center mb-3">Connexion Utilisateur</h2>
+        <form  #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+           
+
+            <div class="form-group mb-3">
+                <label for="">Email </label>
+                <input type="email" name="email" ngModel required #email="ngModel" class="form-control" placeholder="email utilisateur ...">
+        </div>
+
+            <div class="form-group mb-3">
+                <label for="">Mot de passe</label>
+                <input type="password" name="password" ngModel required #password="ngModel" class="form-control" placeholder="Mot de passe utilisateur ...">
+        </div>
+    
+    <div class="form-group mb-3 text-center">
+       
+       <button class="btn btn-success">Connecter</button>
+       <a routerLink="/register" class="btn btn-default text-primary">Vous n'avez pas un compte, creer</a>
+        
+</div>
+
+        </form>
+    </div>
+
+
+</div>
+

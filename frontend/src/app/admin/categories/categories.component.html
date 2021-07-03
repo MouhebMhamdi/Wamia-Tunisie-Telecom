@@ -1,0 +1,126 @@
+<app-header-admin></app-header-admin>
+
+
+
+<div class="container p-5 m-5">
+  <div class="row col-12">
+
+    <div class="col-6">
+      <h4 class="text-secondary"> <i class="bi bi-bookmarks-fill"></i> Liste des categories</h4>
+    </div>
+    <div class="col-6 d-flex justify-content-end p-2">
+      <a  class="btn btn-primary" (click)="open(content)"><i class="bi bi-bookmark-plus-fill"></i> Ajouter</a>
+
+    </div>
+  </div>
+    
+    <hr /> 
+    <div class="">
+      <table class="table table-bordered">
+          <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th>Nom</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+        
+              <tr *ngFor="let cat of categories;index as i">
+                <th scope="row">{{ i+1 }}</th>
+                <td>{{ cat.nom }}</td>
+                <td>{{ cat.description }}</td>
+             
+                <td>
+                    <a (click)="openEdit(EditCategorie,cat)" class="btn btn-success me-2"><i class="bi bi-pencil-square"></i> </a>
+              
+                    <a (click)="deleteCategorie(cat._id)" class="btn btn-danger"><i class="bi bi-trash"></i> </a>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+
+    <!-- Models -->
+
+
+    <ng-template #content let-modal>
+      <form #addCategorieForm="ngForm" (ngSubmit)="addCategorie(addCategorieForm)">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Ajouter Categorie</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+          <div class="form-group">
+            <label for="dateOfBirth">Nom Categorie :</label>
+            <input type="text" name="nom" ngModel #nom="ngModel" placeholder="Nom Categorie ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Description Categorie :</label>
+            <textarea name="description" ngModel #description="ngModel" class="form-control" placeholder="description ..." cols="30" rows="10"></textarea>
+   
+            
+          </div>
+          
+         
+  
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" >Save</button>
+      </div>
+    </form>
+    </ng-template>
+  
+    
+ 
+    <ng-template #EditCategorie let-modal>
+      <form #editCategorieForm="ngForm" (ngSubmit)="editCategorie(editCategorieForm)">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit Categorie</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+          <div class="form-group">
+            <label for="dateOfBirth">Nom Categorie :</label>
+            <input type="text" name="nom" [ngModel]="editCat.nom"  placeholder="Nom Categorie ..." class="form-control">
+            
+          </div>
+          <div class="form-group">
+            <label for="dateOfBirth">Description Categorie :</label>
+            <textarea name="description"  [ngModel]="editCat.description" class="form-control" placeholder="description ..." cols="30" rows="10"></textarea>
+   
+            
+          </div>
+          
+         
+  
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" >Save</button>
+      </div>
+    </form>
+    </ng-template>
+  
+    
+    
+  
+
+   
+  
+
+
+
