@@ -112,7 +112,7 @@ exports.UpdateRole=async(req,res)=>{
     await User.findById(req.params.id).then(user=>{
         
             User.findByIdAndUpdate(user._id,{ 'role' : req.params.event }).then(user=>{
-                return res.status(200).json({'message' : 'changed'});
+                return res.status(200).json(res);
             }).catch(err=>{
                 return res.status(400).json(err);
             })

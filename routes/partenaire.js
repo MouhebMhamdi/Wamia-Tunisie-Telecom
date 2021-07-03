@@ -11,6 +11,6 @@ router.get('/:id/events', PartenaireController.getMyEvents )
 router.get('/events/:id',PartenaireController.getMyEventById)
 router.post('/event/add', upload.single('image') ,PartenaireController.AddEvent )
 router.post('/profile/:id', PartenaireController.UpdateProfile )
-router.post('/updateEvent/:id',PartenaireController.updateEvent)
+router.post('/updateEvent/:id',upload.single('image'),PartenaireController.updateEvent)
 
 module.exports = router;

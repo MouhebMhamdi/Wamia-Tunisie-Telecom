@@ -26,6 +26,9 @@ const EventSchema = mongoose.Schema({
     heure : {
         type : String
     },
+    videoUrl: {
+        type : String
+    },
     partenaire :{
         type : mongoose.Schema.Types.ObjectId, 
         ref :'users'

@@ -67,7 +67,6 @@ exports.getMyEventById = async (req,res) => {
     })
 }
 exports.AddEvent = (req,res,next) => {
-console.log(req.files)
     const event = new Event({
         nom :  req.body.nom,
         image : req.file.filename,
@@ -76,6 +75,7 @@ console.log(req.files)
         prix : req.body.prix ,
         date :  req.body.date,
         heure :  req.body.heure,
+        videoUrl:req.body.videoUrl,
         partenaire : req.body.partenaire
     });
 
