@@ -2,23 +2,23 @@ const mongoose = require('mongoose');
 const PartenaireSchema = mongoose.Schema({
     nom : {
         type : String ,
-        required : true
+        required : false
     },
     prenom : {
         type : String ,
-        required : true
+        required : false
     },
     telephone : {
         type : String ,
-        required : true
+        required : false
     },
     adresse : {
         type : String ,
-        required : true
+        required : false
     },
     image : {
         type : String ,
-        required : true
+        required : false
     },
     categorie : {
         type : mongoose.Schema.Types.ObjectId, 

@@ -15,7 +15,7 @@ export class HeaderAdminComponent implements OnInit {
   Logout(){
   localStorage.clear();
   sessionStorage.clear();
-  this.router.navigate(['/login']);
+  this.router.navigate(['/Adminlogin']);
   }
 
 }

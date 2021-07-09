@@ -4,6 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import axios from 'axios';
 import { ToastrService } from 'ngx-toastr';
 import {formatDate} from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-evenement',
@@ -13,10 +15,18 @@ import {formatDate} from '@angular/common';
 export class EvenementComponent implements OnInit {
   selectedFile : File = null
   events : any = [];
+  urlImg:any;
+  p: number = 1;
+  minDate = moment(new Date()).format('YYYY-MM-DD') ;
   events1 : any = [];
   part : any = {};
+  oneEvents:any;
+  url:string;
+  
+  newprix:any;
+  urlSafe: SafeResourceUrl;
   categories : any = [];
-  constructor(private modalService: NgbModal,private toastr: ToastrService) { }
+  constructor(private modalService: NgbModal,private toastr: ToastrService,public sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.getEvents();
@@ -69,6 +79,7 @@ DeleteEvent(id){
     this.open(content);
     axios.get('http://127.0.0.1:8000/partenaire/events/'+id).then(res=>{
     this.events1 = res.data;
+    this.urlImg="http://127.0.0.1:8000/uploadsFolder/"+this.events1.image;
     console.log(formatDate(new Date(),'dd/MM/yyyy','fr'));
   }).catch(err=>{
     console.log(err);
@@ -76,26 +87,30 @@ DeleteEvent(id){
   
   }
   updateEvent(idEvent,f:NgForm){
-    alert(f.controls.date.value)
+    alert(f.controls.categorie.value)
+  
     const data = new FormData();
     data.append('nom' , f.controls.nom.value)
     data.append('description' , f.controls.description.value)
-    data.append('categorie' , f.controls.categorie.value)
+    data.append('categerie' , f.controls.categorie.value)
     data.append('partenaire' ,localStorage.getItem('partenaire'))
     data.append('prix' , f.controls.prix.value)
     data.append('image' , this.selectedFile)
     data.append('date' , f.controls.date.value)
     data.append('heure' , f.controls.heure.value)
+    console.log(data)
     axios.post('http://127.0.0.1:8000/partenaire/updateEvent/'+idEvent,data).then(res => {
       //this.partenaire = res.data
       
       console.log(res.data);
-      this.toastr.success('Evenement ajoutee avec success','Partenaire Notification')
-      this.modalService.dismissAll()
+      if(res){
+      this.toastr.success('Evenement Modifée avec success','Partenaire Notification')
+      this.modalService.dismissAll();}
     this.getEvents()
  
     }).catch(err=>{
-
+      console.log(err)
+      this.toastr.error('Erreur de modification','Partenaire Notification')
     })
   }
   getEvents(){
@@ -132,6 +147,18 @@ DeleteEvent(id){
     }).catch(err=>{
 
     })
+  }
+  searchEventByID(id,content){
+    this.open(content);
+    axios.get('http://127.0.0.1:8000/user/searchEventByid/'+id).then(res=>{
+          this.oneEvents = res.data;
+          this.newprix=res.data.prix;
+          this.url="https://www.youtube.com/embed/"+this.oneEvents.videoUrl+"?autoplay=1";
+          this.urlSafe= this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
+
+        }).catch(err=>{
+          console.log(err)
+        })
   }
 // Models
 open(content) {

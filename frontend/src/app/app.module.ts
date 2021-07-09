@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StripeModule } from "stripe-angular"
-
+import {NgxPaginationModule} from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
@@ -36,7 +36,9 @@ import { EventscComponent } from './client/eventsc/eventsc.component';
 import { NavbarcComponent } from './client/navbarc/navbarc.component';
 import { LogoutComponent } from './logout/logout.component';
 import { PaymentComponent } from './client/payment/payment.component';
-import { StatComponent } from './admin/stat/stat.component'; // a plugin!
+import { StatComponent } from './admin/stat/stat.component';
+import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
+import { AdminRegisterComponent } from './pages/admin-register/admin-register.component'; // a plugin!
 //import interactionPlugin from '@fullcalendar/interaction'; // a plugin!
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -65,9 +67,12 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     NavbarcComponent,
     LogoutComponent,
     PaymentComponent,
-    StatComponent
+    StatComponent,
+    AdminLoginComponent,
+    AdminRegisterComponent
   ],
   imports: [
+    BrowserModule, NgxPaginationModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

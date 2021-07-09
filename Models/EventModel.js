@@ -31,7 +31,7 @@ const EventSchema = mongoose.Schema({
     },
     partenaire :{
         type : mongoose.Schema.Types.ObjectId, 
-        ref :'users'
+        ref :'partenaires'
     },
     stat : {
         type : String ,

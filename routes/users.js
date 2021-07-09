@@ -15,5 +15,7 @@ router.post('/profile/:id', UserController.UpdateProfile )
 router.post('/payment/:id/:idPayment', UserController.payment )
 router.post('/UpdateRole/:id/:event',UserController.UpdateRole)
 router.get('/searchEventByid/:id',UserController.searchEventByid)
-
+router.post('/deletePartenaire/:id',UserController.DeletePartenaire)
+router.get('/getPayments',UserController.getPayments)
+router.get('/getPayments/:id/:event',UserController.getPaymentsByIdUser)
 module.exports = router;

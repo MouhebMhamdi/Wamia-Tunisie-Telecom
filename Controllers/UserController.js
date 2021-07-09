@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt')
 const Payment = require('../Models/PaymentModel')
 const Event = require('../Models/EventModel')
+const { __await } = require('tslib')
 
 exports.getAll = async(req,res) => {
     await User.find({}).then(users=>{
@@ -40,6 +41,20 @@ exports.UpdateProfile = async(req,res) => {
         return res.status(400).json(err)
     })
    
+}
+exports.getPaymentsByIdUser =async (req,res) => {
+    await Payment.find({'user':req.params.id,'event':req.params.event}).populate('user').populate('event').then(Payment=>{
+        return res.status(200).json(Payment);
+    }).catch(err=>{
+        return res.json(err);
+    })
+}
+exports.getPayments =async (req,res) => {
+    await Payment.find({}).populate('user').populate('event').then(Payment=>{
+        return res.status(200).json(Payment);
+    }).catch(err=>{
+        return res.json(err);
+    })
 }
 exports.getClients =async (req,res) => {
     await Client.find({}).populate('user').then(clients=>{
@@ -76,24 +91,57 @@ exports.getPartenaires =async(req,res) => {
         return res.json(err);
     })
 }
-
+exports.DeletePartenaire =async (req,res)=>{
+    Partenaire.findOneAndRemove({'user': req.params.id}).then(data=>{
+        return res.status(200).json(data);
+    }).catch(err=>{
+        return res.json(err);
+    });
+}
 exports.DeleteUser = async (req,res) => {
 
 
     await User.findByIdAndRemove(req.params.id).then(data=>{   
         if (data.role == "Partenaire"){
-             Partenaire.findOneAndRemove({'user': data._id},(res,err)=>{
-                if(res){console.log(res);}
+             Partenaire.findOneAndRemove({'user': data._id}).then(data=>{
+                return res.status(200).json(data);
+            }).catch(err=>{
+                return res.json(err);
             });
         }else if (data.role == "Client"){
-            console.log(data._id)
-             Client.findOneAndRemove({'user': data._id},(res,err)=>{
-                if(res){console.log(res);}
+
+             Client.findOneAndRemove({'user': data._id}).then(data=>{
+                if(data){
+                     Payment.findOneAndRemove({'user': data._id}).then(data=>{
+                        
+                    }).catch(err=>{
+                        return res.json(err);
+                    });
+                     Event.findOneAndRemove({'user': data._id}).then(data=>{
+                       
+                    }).catch(err=>{
+                        return res.json(err);
+                    });
+                }
+                return res.status(200).json(data);
+            }).catch(err=>{
+                return res.json(err);
             });
+             
         }else{
-             Admin.findOneAndRemove({'user': data._id},(res,err)=>{
-                if(res){console.log(res);}
+             Admin.findOneAndRemove({'user': data._id}).then(data=>{
+                if(data){
+                     Client.findOneAndRemove({'user': data._id}).then(data=>{
+                        
+                    }).catch(err=>{
+                        return res.json(err);
+                    });
+                }
+                return res.status(200).json(data);
+            }).catch(err=>{
+                return res.json(err);
             });
+            
         } 
         return res.status(200).json(data);
     }).catch(err=>{
@@ -109,17 +157,52 @@ exports.DeleteEvent = async (req,res) => {
 }
 
 exports.UpdateRole=async(req,res)=>{
-    await User.findById(req.params.id).then(user=>{
-        
-            User.findByIdAndUpdate(user._id,{ 'role' : req.params.event }).then(user=>{
+   
+            
+          await  User.findByIdAndUpdate(req.params.id,{ 'role' : req.params.event }).then(user=>{
+                if( req.params.event=="Partenaire"){
+
+                    Client.findOneAndRemove({'user': user._id}).then(data=>{
+                       
+                   
+                    const partenaire = new Partenaire({
+                        nom : req.body.nom ,
+                        prenom : req.body.prenom ,
+                        user : req.body.user ,
+                        adresse : req.body.adresse ,
+                        telephone : req.body.telephone ,
+                        image : req.body.image ,
+                        categorie : req.body.categorie
+                    });
+                      partenaire.save((error,data) => {
+                        
+                    });
+                }).catch(err=>{
+                        
+                });
+                }else{
+                    Partenaire.findOneAndRemove({'user': user._id}).then(data=>{
+                        const client = new Client({
+                            nom : '' ,
+                            prenom : '' ,
+                            user : user._id ,
+                            adresse : '' ,
+                            telephone : '' ,
+                            image : '' ,
+                        });
+                            client.save((error,data) => {
+                            
+                        });
+                    }).catch(err=>{
+                        
+                    });
+                }
                 return res.status(200).json(res);
             }).catch(err=>{
                 return res.status(400).json(err);
             })
        
-    }).catch(err=>{
-        return res.json(err);
-    })
+   
 }
 
 exports.payment = async(req,res) => {
@@ -174,11 +257,11 @@ exports.signup = async(req,res) => {
             if(data){
                 if(req.body.role == "Admin"){
                     const admin = new Admin({
-                        nom : '' ,
-                        prenom : '' ,
-                        telephone:'',
-                        adresse : '' ,
-                        image :'',
+                        nom : req.body.nom ,
+                        prenom : req.body.prenom ,
+                        telephone:req.body.tel,
+                        adresse : req.body.adresse ,
+                        image :req.body.image,
                         user : data._id ,
                         
                     });
@@ -211,12 +294,13 @@ exports.signup = async(req,res) => {
 
                 }else{
                     const client = new Client({
-                        nom : '' ,
-                        prenom : '' ,
+                        nom : req.body.nom ,
+                        prenom : req.body.prenom ,
                         user : data._id ,
-                        adresse : '' ,
-                        telephone : '' ,
-                        image : '' ,
+                        adresse : req.body.adresse ,
+                        telephone:req.body.telephone,
+                        image :req.body.image,
+                       
                     });
                     client.save((error,data) => {
                         if(data){
@@ -235,14 +319,59 @@ exports.signup = async(req,res) => {
     }) // add user 
 }
 
+exports.signinAdmin = async(req,res) => {
+    await User.findOne({
+        email : req.body.email            
+    }).exec((error,user)=>{
+        if(error) return res.status(400).json({ error })
+        if(user){
+            if(user.role!="Admin" ){
+                return res.status(501).json({message : "Erreur login"}) 
+            }
+           
+                user.authenticate(req.body.password).then( 
+                    data => {
+                        if(data){
+                            const token = jwt.sign({ _id:user._id , role : user.role  },"secrets", { expiresIn : '1h'}) 
+                            const { _id ,  username , email , role , active } = user;
+                            res.status(200).json({
+                                token,
+                                user :{
+                                    _id ,
+                                    username ,
+                                    email ,
+                                    role ,
+                                    active
+                                
+                                }
+                            })
+                        }else{
+                            return res.status(400).json({message : "Invalid password "}) 
+                        }
+                    
+                            
+                })
+                    
+                
+                    
+        }
+        else{
+            return res.status(403).json({ message : 'Something went wrong' })
+        }
+    })
+}
+
+
+
+
 exports.signin = async(req,res) => {
     await User.findOne({
         email : req.body.email            
     }).exec((error,user)=>{
         if(error) return res.status(400).json({ error })
         if(user){
-            if(user.active==0 && user.role=="Partenaire" ){
-                return res.status(501).json({message : "Compte non Active"}) 
+            if(user.active==0 && user.role=="Partenaire" ||  user.role=="Admin"){
+                return res.status(501).json({message : "Compte non Active"})    
             }
            
                 user.authenticate(req.body.password).then( 
@@ -299,7 +428,7 @@ exports.getClientByUserId = async(req,res,nex) => {
 }
 
 exports.searchEventByid = async (req,res) =>{
-    await Event.findById(req.params.id).populate('categerie').then(user=>{
+    await Event.findById(req.params.id).populate('categerie').populate('partenaire').then(user=>{
         return res.status(200).json(user);
     }).catch(err=>{
         return res.status(462).json(err);

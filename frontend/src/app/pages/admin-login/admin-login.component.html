@@ -7,7 +7,7 @@
             <img src="/assets/Tunisie-Telecom.png" width="200" />
         </div>
        
-        <h2 class="text-center mb-3">Connexion Utilisateur</h2>
+        <h2 class="text-center mb-3">Connexion Admin</h2>
         <form  #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
            
 
@@ -23,13 +23,15 @@
     
     <div class="form-group mb-3 text-center">
        <div class="col">
-           <div class="col-sm-12"> <button class="btn btn-success">Connecter</button></div>
            <div class="col-sm-12">
-                 <a routerLink="/register" class="btn btn-default text-primary">Vous n'avez pas un compte ?, creer</a>
-
+            <button class="btn btn-success">Connecter</button>
            </div>
+           <div class="col-sm-12">
+              <a routerLink="/AdminRegister" class="btn btn-default text-primary">Vous n'avez pas un compte ?, creer</a>
+           </div>
+              
+
         </div>
-       
         
 </div>
 

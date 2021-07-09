@@ -14,10 +14,18 @@ import { Router } from '@angular/router';
 export class StatComponent implements OnInit {
 
   constructor(private toastr:ToastrService,private router:Router) { }
+  som:number=0;
+  nbrTickets:number=0;
   clients : any ;
   clinetid: any;
+  nb:number = 0;
+  partenaires:any;
+  data1:any;
+  nbrpart:number=0;
+  nbrAdmin:number=0;
   count:[];
   c:any;
+  i:number=0;
   ngOnInit(): void {
     if(sessionStorage.getItem('idUser')!=""){
       if(localStorage.getItem('role')!="Admin"){
@@ -26,6 +34,8 @@ export class StatComponent implements OnInit {
     }
     
     this.getClients();
+    this.getPartenaires();
+    this.getPayment();
     this.c=this.count;
     console.log(this.c.length);
   }
@@ -41,7 +51,10 @@ export class StatComponent implements OnInit {
     axios.get('http://127.0.0.1:8000/user/'+id+'/active/change').then(res=>{
     
     
+  
     this.getClients();
+    this.getPartenaires();
+    
     this.toastr.success('L\'etat d\'utilisateur changee avec succes', 'Notification Administrateur');
       //this.partenaires = res.data;
       }).catch(err=>{
@@ -66,34 +79,105 @@ onChange(event,id) {
 
   console.log(event+"id= "+id);
   this.UpdateRole(id,event);
-
-  this.getClients();
+  this.toastr.success('Le role est changée avec succés ', 'Changement du role');
+    this.getPartenaires();
+    this.getClients();
+    
+    this.router.navigate(['/admin/statistiques']);
 }
   getClients(){
       axios.get('http://127.0.0.1:8000/user/clients').then(res=>{
+        
+        for(let list of res.data){
+          if(list.user.role=="Client"){
+             this.i++;}
+             if(list.user.role=="Admin"){
+               this.nbrAdmin++;
+             }
+        }
         this.count=res.data;
-        this.c=this.count.length
-       
+        this.c=this.nbrAdmin+this.i;
+        console.log(this.nbrpart)
+        
         this.clients = res.data;
-        this.toastr.success('Le role est changée avec succés ', 'Changement du role');
+        console.log("nbr part: "+this.nb)
+        console.log("nbr client: "+this.i)
+        console.log("nbr Admin: "+this.nbrAdmin)
         }).catch(err=>{
 
         })
+        
+  }
+  async getPayment(){
+    
+    await axios.get('http://127.0.0.1:8000/user/getPayments').then(res=>{
+
+     
+        for(let r of res.data){
+          this.som+=Number(r.price);
+          this.nbrTickets+=Number(r.nbrTicket);
+        }
+      
+
+      }).catch(err=>{
+
+      })
+  }
+  async getPartenaires(){
+    await axios.get('http://127.0.0.1:8000/user/Partenaires').then(res=>{
+     
+      
+     this.nb=res.data.length;
+      console.log(this.nb)
+      this.count=res.data;
+      this.partenaires = res.data;
+      }).catch(err=>{
+
+      })
+}
+  addPartenaire(email,username,pwd,categorie){
+    const data = {
+      email : email,
+      nom : "",
+      prenom : '',
+      role : "Partenaire",
+      username : username,
+      password : pwd,
+      telephone : "",
+      adresse : "",
+      image : "",
+      categorie : categorie,
+    }
+    axios.post("http://127.0.0.1:8000/auth/signup",data).then(res=>{
+      console.log(res.data)
+      this.toastr.success('Partenaire ajoutee avec succes', 'Notification Administrateur');
+    }).catch(err=>{
+      this.toastr.success('Impossible  d\'ajoutee ce partenaire', 'Notification Administrateur');
+      console.log(err)
+    })
+
   }
   UpdateRole(id,role){
-    axios.post('http://127.0.0.1:8000/user/UpdateRole/'+id+"/"+role).then(res=>{
+
+    const partenaire ={
+      nom : "" ,
+      prenom : "" ,
+      user : id ,
+      adresse : "" ,
+      telephone : "" ,
+      image : "" ,
+      categorie : "60e24b80868d0217684f8811"
+  }
+    axios.post('http://127.0.0.1:8000/user/UpdateRole/'+id+"/"+role,partenaire).then(res=>{
       this.count=res.data;
       this.c=this.count.length
      
       this.clients = res.data;
       this.getclientbyid(id);
-      if(role=="Partenaire"){
-       console.log(res.data)
-        axios.post('http://127.0.0.1:8000/event/add/',this.clinetid).then(res=>{
-        }).catch(err=>{
+      this.getClients();
+      this.getPartenaires();
+      this.toastr.success('Le role est changée avec succés ', 'Changement du role');
 
-        })
-      }
       }).catch(err=>{
 
       })
@@ -109,7 +193,7 @@ onChange(event,id) {
   barChartPlugins = [];
 
   barChartData: ChartDataSets[] = [
-    { data: [45, 37, 60, 70, 46, 33], label: 'Meilleur evenement' }
+    { data: [2, 37, 60, 70, 46, 33], label: 'Meilleur evenement' }
   ];
   //===============================================
   //dought chart==================================

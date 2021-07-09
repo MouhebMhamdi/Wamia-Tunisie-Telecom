@@ -32,26 +32,7 @@ exports.UpdateProfile = async(req,res) => {
    
 }
 
-exports.updateEvent=async(req,res)=>{
-    const event={
-        nom:req.body.nom,
-        description:req.body.description,
-        categerie:req.body.categorie,
-        partenaire:req.body.partenaire,
-        prix:req.body.prix,
-        image:req.file.filename,
-        date:req.body.date,
-        heure:req.body.heure,
-        
-    }
-    await Event.findByIdAndUpdate(req.params.id,event).populate('categorie').then(Event =>{
-        return res.status(200).json(Client)
-    }).catch(err=> {
-        console.log(err)
-        return res.status(400).json(err)
-    })
-    
-}
+
 exports.getMyEvents = (req,res) => {
     Event.find({partenaire : req.params.id }).then(events=>{
         return res.status(200).json(events);
@@ -85,4 +66,26 @@ exports.AddEvent = (req,res,next) => {
     }).catch(err=>{
         return res.json(err);
     })
+}
+exports.updateEvent=async(req,res)=>{
+    const event={
+        nom :  req.body.nom,
+        image : req.file.filename,
+        description : req.body.description,
+        categerie : req.body.categerie,
+        prix : req.body.prix ,
+        date :  req.body.date,
+        heure :  req.body.heure,
+        videoUrl:req.body.videoUrl,
+        partenaire : req.body.partenaire
+        
+    }
+    console.log(data)
+    await Event.findByIdAndUpdate(req.params.id,{...event}).populate('categerie').then(Event =>{
+        return res.status(200).json(Event)
+    }).catch(err=> {
+        console.log(err)
+        return res.status(400).json(err)
+    })
+    
 }

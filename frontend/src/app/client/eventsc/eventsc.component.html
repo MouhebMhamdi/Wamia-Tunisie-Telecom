@@ -15,23 +15,45 @@
         </div>
         </div>
       <div class="col-sm-4">
-      <select class="form-select" width="100" aria-label="Default select example">
-        <option selected>Choisie une catégorie</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+        <select #select class="form-select" width="100" aria-label="Default select example" (change)="onChange(select.value)">
+          <option value="Empty" selected>Choisie une catégorie</option>
+          <option *ngFor="let cat of cat" [value]="cat.nom">{{cat.nom}}</option>
+          
+        </select>
       </div>
      
   </div>
-      <div class="col-12 row p-3">
-        <div class="col-3" *ngFor="let e of events">
-          <div class="card" >
+      <div class="col-12 row p-3 ml-2" *ngIf="evv == empty">
+        <div class="col-3" *ngFor="let e of events | paginate: { itemsPerPage: 4, currentPage: p}">
+          <div class="card" *ngIf="e.categerie.nom!=evv">
             <div class="card-header">
                   <h6> {{ e.date | date }}</h6>
             </div>
             <div class="card-body">
-              <img src="http://127.0.0.1:8000/uploadsFolder/{{e.image}}" width="180" height="300" >
+              <img src="http://127.0.0.1:8000/uploadsFolder/{{e.image}}" class="img-thumbnail rounded"   width="180" height="300" >
+              <h6> {{ e.nom }}  </h6>
+                <h5><span class="badge bg-danger"> {{ e.prix }} DT </span></h5>
+                <p >{{ e.description | slice:0:100 }} ...</p>
+                <div class="row">
+                  <div class="col-sm-6"><button class="btn btn-success" (click)="searchEventByID(e._id,Payement)">Reserver</button>
+                  </div>
+                  <div class="col-sm-3"><a (click)="searchEventByID(e._id,Show)" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a></div>
+                 </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-5  ">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+      <div class="col-12 row p-3 ml-2" *ngIf="evv!=null">
+        <div class="col-3" *ngFor="let e of events ">
+          <div class="card" *ngIf="e.categerie.nom==evv">
+            <div class="card-header">
+                  <h6> {{ e.date | date }}</h6>
+            </div>
+            <div class="card-body">
+              <img src="http://127.0.0.1:8000/uploadsFolder/{{e.image}}" class="img-thumbnail rounded"   width="180" height="300" >
               <h6> {{ e.nom }}  </h6>
                 <h5><span class="badge bg-danger"> {{ e.prix }} DT </span></h5>
                 <p >{{ e.description | slice:0:100 }} ...</p>
@@ -44,6 +66,7 @@
           </div>
         </div>
       </div>
+      
      
     
 
@@ -69,6 +92,11 @@
         <div class="form-group">
           <label for="dateOfBirth">categerie: </label>
           <h6>{{oneEvents.categerie.nom}}</h6>
+          
+        </div>
+        <div class="form-group">
+          <label for="dateOfBirth">Lieu: </label>
+          <h6>{{oneEvents.partenaire.adresse}}</h6>
           
         </div>
         

@@ -15,16 +15,16 @@
   </div>
     
     <hr /> 
-    <div class="row col-12">
-        <div class="col-3" *ngFor="let event of events">
+    <div class="row col-12 ml-2">
+        <div class="col-3" *ngFor="let event of events | paginate: { itemsPerPage: 4, currentPage: p}">
           <div class="card"  >
             <img src="http://127.0.0.1:8000/uploadsFolder/{{ event.image }}" with="180" height="300" class="card-img-top" alt="...">
             <div class="card-body">
-              <span class="badge bg-danger">{{ event.prix }} DTT</span>
+              <span class="badge bg-danger">{{ event.prix }} DT</span>
               <h5 class="card-title">{{ event.nom }}</h5>
-              <p class="card-text"> {{ event.description }}</p>
+              <p class="card-text"> {{ event.description | slice:0:100}}...</p>
               <div class="row">
-                <div class="col-sm-3"><a href="#" class="btn btn-primary"><i class="bi bi-eye-fill"></i></a></div>
+                <div class="col-sm-3"><a  class="btn btn-primary" (click)="searchEventByID(event._id,Show)"><i class="bi bi-eye-fill"></i></a></div>
                 <div class="col-sm-3"> <a (click)="getMyEvent(event._id,EditEvent)" class="btn btn-success me-2"><i class="bi bi-pencil-square"></i> </a></div>
                 <div class="col-sm-3"><a (click)="DeleteEvent(event._id)"  class="btn btn-danger"><i class="bi bi-trash"></i> </a></div>
                </div>
@@ -34,7 +34,9 @@
           </div>
            
         </div>
-      
+          <div class="text-center mt-5  ">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
     </div>
 
 
@@ -63,31 +65,31 @@
           </div>
         <div class="form-group">
           <label for="dateOfBirth">Nom evenement :</label>
-          <input type="text" name="nom" ngModel #nom="ngModel" placeholder="Nom Evenement ..." class="form-control">
+          <input type="text" name="nom" ngModel #nom="ngModel" placeholder="Nom Evenement ..." class="form-control" required>
           
         </div>
         <div class="form-group">
           <label for="dateOfBirth">Description Evenement :</label>
-          <textarea name="description" ngModel #description="ngModel" class="form-control" placeholder="description Evenement ..." cols="30" rows="10"></textarea>
+          <textarea name="description" ngModel #description="ngModel" class="form-control" placeholder="description Evenement ..." cols="30" rows="10" required></textarea>
  
           
         </div>
         
         <div class="form-group">
             <label for="dateOfBirth">Image Evenement :</label>
-            <input type="file" name="image" (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." />
+            <input type="file" name="image" (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." required/>
    
             
           </div>
           <div class="form-group">
             <label for="dateOfBirth">Prix Ticket :</label>
-            <input type="number" name="prix" ngModel #prix="ngModel" class="form-control" placeholder="prix ticket ..." />
+            <input type="number" name="prix" ngModel #prix="ngModel" class="form-control" placeholder="prix ticket ..." required/>
      
           </div>
 
           <div class="form-group">
             <label for="dateOfBirth">Date Evenement :</label>
-            <input type="date" name="date" ngModel #date="ngModel" class="form-control" placeholder="date evenement ..." />
+            <input type="date" name="date" [min]="minDate" ngModel #date="ngModel" class="form-control" placeholder="date evenement ..." required/>
      
           </div>
 
@@ -130,9 +132,10 @@
 
       <div class="form-group">
           <label for="dateOfBirth">Categorie Evenement :</label>
-          <select name="categorie" ngModel #categorie="ngModel" class="form-control">
-            <option selected value="" >Ancienne categorie "{{events1.categerie.nom}}" sélectionner autre</option>
-            <option *ngFor="let cat of categories" value="{{ cat._id }}" >{{ cat.nom }}</option>
+          <select  name="categorie" ngModel #categorie="ngModel" class="form-control">
+            <option value="" selected>sélctionner une catégorie</option>
+            <option  [value]="events1.categerie._id" selected>{{events1.categerie.nom}}</option>
+
           </select>
           
         </div>
@@ -150,7 +153,7 @@
       
       <div class="form-group">
           <label for="dateOfBirth">Image Evenement :</label>
-          <input type="file" name="image"  (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." />
+          <input type="file" name="image" [ngModel]="urlImg" (change)="onSelectFile($event)" class="form-control" placeholder="image Evenement ..." />
  
           
         </div>
@@ -162,8 +165,8 @@
 
         <div class="form-group">
           <label for="dateOfBirth">Date Evenement :</label>
-          {{events1.date | date: 'dd/MM/yyyy'}}
-          <input type="date" name="date" value="{{events1.date | date: 'dd/MM/yyyy'}}" class="form-control" placeholder="date evenement ..." />
+        
+          <input type="date" name="date" [ngModel]="events1.date |  date:'yyyy-MM-dd'" class="form-control" placeholder="date evenement ..." />
           
         </div>
 
@@ -187,4 +190,29 @@
       <button type="submit" class="btn btn-outline-dark" >Save</button>
     </div>
   </form>
+  </ng-template>
+
+
+  <ng-template #Show let-modal >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{oneEvents.nom}}  <h5><span class="badge bg-danger"> {{ oneEvents.prix }} DT </span></h5></h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    
+       
+      <iframe width="470" height="415" [src]="urlSafe" frameborder="0"  allowfullscreen></iframe>
+      
+      
+          <b>Déscription: </b>  
+          <h6>{{oneEvents.description}}</h6>
+    
+
+      
+      
+    </div>
+    
+ 
   </ng-template>

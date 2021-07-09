@@ -16,12 +16,20 @@ import { ProfilepComponent } from './partenaire/profilep/profilep.component';
 import { LogoutComponent } from './logout/logout.component';
 import { PaymentComponent } from './client/payment/payment.component';
 import { StatComponent } from './admin/stat/stat.component';
+import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
+import { AdminRegisterComponent } from './pages/admin-register/admin-register.component';
 
 
 
 const routes: Routes = [
   {
     path: '',   redirectTo: 'login', pathMatch: 'full'
+  },
+  {
+    path: 'AdminRegister',  component:AdminRegisterComponent
+  },
+  {
+    path : 'Adminlogin' , component : AdminLoginComponent
   },
   {
     path : 'login' , component : LoginComponent
@@ -83,7 +91,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  exports: [RouterModule],
+  
 })
 export class AppRoutingModule { }

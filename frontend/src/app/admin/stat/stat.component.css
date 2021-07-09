@@ -291,6 +291,7 @@
   .card {
     position: relative;
     display: flex;
+    height: 100px;
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;

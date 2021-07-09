@@ -15,7 +15,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Total d'utilisateur</h5>
-                      <span class="h2 font-weight-bold mb-0">{{c}}</span>
+                      <span class="h2 font-weight-bold mb-0">{{c+nb}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -23,10 +23,7 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                    <span class="text-nowrap">depuis le mois dernier</span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
@@ -35,8 +32,26 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">prix d'utilisateur</h5>
-                      <span class="h2 font-weight-bold mb-0">225</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Nombres de clients</h5>
+                      <span class="h2 font-weight-bold mb-0">{{i}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="bi bi-person"></i>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-6">
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Tickets vendus</h5>
+                      <span class="h2 font-weight-bold mb-0">{{nbrTickets}}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -44,41 +59,18 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                    <span class="text-nowrap">depuis la semaine dernière</span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
-            <div class="col-xl-3 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Revenue total</h5>
-                      <span class="h2 font-weight-bold mb-0">924</span>
-                    </div>
-                    <div class="col-auto">
-                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                        <i class="fas fa-chart-line"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                    <span class="text-nowrap">depuis hier</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+           
             <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Solde total</h5>
-                      <span class="h2 font-weight-bold mb-0">256633258</span>
+                      <span class="h2 font-weight-bold mb-0">{{som}} DT</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -86,10 +78,7 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                    <span class="text-nowrap">depuis le mois dernier</span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
@@ -139,13 +128,18 @@
     </div>
 
     <table class="table table-bordered mt-5">
+      <thead>
+        <tr>
+          <th colspan="5">Admins & Clients</th>
+        </tr> 
+      </thead>
         <thead>
             <tr>
               <th scope="col">#</th>
               <th>Nom utilisateur</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
-              <th scope="col">Actions</th>
+              <th scope="col" style="text-align: center; vertical-align: middle;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -159,11 +153,43 @@
                 <option *ngIf="client.user.role!='Partenaire' " value="Partenaire">Partenaire</option>
                 <option  *ngIf="client.user.role!='Client'" value="Client">Client</option>
               </select></td>
-              <td>
-                <a title="Activer" *ngIf="client.user.active == 0" (click)="activeUser(client.user._id)" class="btn btn-success me-2"><i class="bi bi-check-circle-fill"></i> </a>
-                <a title="Desactiver" *ngIf="client.user.active == 1" (click)="activeUser(client.user._id)" class="btn btn-warning me-2 text-white">
-                  <i class="bi bi-x-circle-fill"></i> </a>
+              <td style="text-align: center; vertical-align: middle;"> 
+               
                 <a  (click)="DeleteUser(client.user._id)" class="btn btn-danger"><i class="bi bi-trash"></i> </a>
+              </td>
+            </tr>
+            
+          </tbody>
+          <thead>
+            <tr>
+              <th colspan="5">Partenaires</th>
+            </tr> 
+          </thead>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th>Nom utilisateur</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col" style="text-align: center; vertical-align: middle;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let partenaire of partenaires;index as i">
+              <th scope="row">{{ i+1 }}</th>
+              <td>{{ partenaire.user.username }}</td>
+              <td>{{ partenaire.user.email }}</td>
+              <td><select #select class="form-select" aria-label="Default select example" (change)="onChange(select.value,partenaire.user._id)">
+                <option selected>{{ partenaire.user.role}}</option>
+                <option  *ngIf="partenaire.user.role!='Admin' " value="Admin">Admin</option>
+                <option *ngIf="partenaire.user.role!='Partenaire' " value="Partenaire">Partenaire</option>
+                <option  *ngIf="partenaire.user.role!='Client'" value="Client">Client</option>
+              </select></td>
+              <td style="text-align: center; vertical-align: middle;">
+                <a title="Activer" *ngIf="partenaire.user.active == 0" (click)="activeUser(partenaire.user._id)" class="btn btn-success me-2"><i class="bi bi-check-circle-fill"></i> </a>
+                <a title="Desactiver" *ngIf="partenaire.user.active == 1" (click)="activeUser(partenaire.user._id)" class="btn btn-warning me-2 ">
+                  <i class="bi bi-x-circle-fill"></i> </a>
+                <a  (click)="DeleteUser(partenaire.user._id)" class="btn btn-danger"><i class="bi bi-trash"></i> </a>
               </td>
             </tr>
             

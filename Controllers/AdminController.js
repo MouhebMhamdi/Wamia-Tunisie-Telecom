@@ -76,7 +76,15 @@ exports.getAllActiveEvents = async(req,res) => {
     });
    
 }
-
+exports.getAllActiveEventsByCategorie = async(req,res) => {
+    await Event.find({ stat : 'active'}).populate('categerie'). // only return the Persons name
+    exec(function (err, events) {
+        if (err) return  res.status(400).json(err);
+        return res.status(200).json(events);
+   
+    });
+   
+}
 
 exports.ActiveEvent = async(req,res) => {
     await Event.findByIdAndUpdate( req.params.id,{stat : 'active'}). // only return the Persons name

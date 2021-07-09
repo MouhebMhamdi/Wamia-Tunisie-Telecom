@@ -14,13 +14,14 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     if(sessionStorage.getItem('idUser')!=""){
       if(localStorage.getItem('role')=="Admin"){
-        this.router.navigate(['/admin/profile']);
+        this.router.navigate(['/admin/profile'],{ skipLocationChange: true})
+        
       }
       if(localStorage.getItem('role')=="Client"){
-        this.router.navigate(['/client/profile']);
+        this.router.navigate(['/client/profile'],{ skipLocationChange: true});
       }
       if(localStorage.getItem('role')=="Partenaire"){
-        this.router.navigate(['/partenaire/profile']);
+        this.router.navigate(['/partenaire/profile'],{ skipLocationChange: true});
       }
     }
   }
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
               if ( res.data.user.role == "Client" ){
                   axios.get('http://127.0.0.1:8000/user/client/'+res.data.user._id).then(client => {
                     //localStorage.setItem('categorie',client.data.categorie)
-                    this.router.navigate(['/client/profile']);
+                    this.router.navigate(['/client/profile'],{ skipLocationChange: true});
                   }).catch(err=>{
 
                   })
@@ -48,13 +49,13 @@ export class LoginComponent implements OnInit {
               }else if (res.data.user.role == "Partenaire"){
                         axios.get('http://127.0.0.1:8000/user/partenaire/'+res.data.user._id).then(partenaire => {
                           localStorage.setItem('categorie',partenaire.data[0].categorie)
-                          this.router.navigate(['/partenaire/profile']);
+                          this.router.navigate(['/partenaire/profile'],{ skipLocationChange: true});
                         }).catch(err=>{
 
                         })
                 
               }else{
-                this.router.navigate(['admin/statistiques']);
+                this.router.navigate(['admin/statistiques'],{ skipLocationChange: true});
               }
               
               //this.toastr.success('Inscription utilisateur effectue avec succes', 'Notification d\'inscription');
