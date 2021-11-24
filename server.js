@@ -31,7 +31,7 @@ app.use('/partenaire', partenaireRoute);
 
 
 //connection()
-mongoose.connect('DB_CONNECTION=mongodb://localhost:27017/eyapfe', {useNewUrlParser: true , useUnifiedTopology: true,useFindAndModify:false },
+mongoose.connect('mongodb+srv://root:root@cluster0.oxdj1.mongodb.net/eyapfe?retryWrites=true&w=majority', {useNewUrlParser: true , useUnifiedTopology: true,useFindAndModify:false },
 ()=>{ console.log("connected to db")})
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
